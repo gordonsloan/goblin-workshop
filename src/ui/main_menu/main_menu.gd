@@ -23,6 +23,7 @@ func _ready() -> void:
 
 
 func _on_start_pressed() -> void:
+	SoundManager.stop_music(0.25)
 	SceneNavigator.start_game()
 
 

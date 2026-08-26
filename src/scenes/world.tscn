@@ -1,0 +1,347 @@
+[gd_scene format=3 uid="uid://bxff70i1dqdh0"]
+
+[ext_resource type="PackedScene" uid="uid://dqakct3r2hc2m" path="res://src/scenes/actors/player.tscn" id="1_w561s"]
+[ext_resource type="Shader" uid="uid://dlkh8gqhnpfck" path="res://src/shaders/psProcess.gdshader" id="2_dq5wt"]
+[ext_resource type="Script" uid="uid://c3b8x11xfnwg2" path="res://src/scenes/world.gd" id="2_world"]
+[ext_resource type="Texture2D" uid="uid://26xb3yuqfsiu" path="res://src/assets/Color Maps/metal_wall_4.png" id="3_dq5wt"]
+[ext_resource type="Texture2D" uid="uid://b7vtlt6h1mivm" path="res://src/assets/Color Maps/wood_5.png" id="5_1l6e7"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p8qt8"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_tvkxc"]
+sky_material = SubResource("ProceduralSkyMaterial_p8qt8")
+
+[sub_resource type="Environment" id="Environment_dq5wt"]
+background_mode = 1
+sky = SubResource("Sky_tvkxc")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dq5wt"]
+shader = ExtResource("2_dq5wt")
+shader_parameter/enabled = true
+shader_parameter/dithering = false
+shader_parameter/colors = 16
+shader_parameter/dither_size = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p8qt8"]
+shading_mode = 2
+albedo_color = Color(0.28594887, 0.14633611, 0.035070617, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_4g8uc"]
+material = SubResource("StandardMaterial3D_p8qt8")
+size = Vector2(5, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tvkxc"]
+shading_mode = 2
+albedo_color = Color(0.28594887, 0.14633611, 0.035070617, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_w561s"]
+material = SubResource("StandardMaterial3D_tvkxc")
+size = Vector2(5, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dq5wt"]
+albedo_texture = ExtResource("3_dq5wt")
+metallic = 1.0
+roughness = 0.5
+uv1_scale = Vector3(0.333, 0.333, 0.333)
+uv1_triplanar = true
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_p8qt8"]
+material = SubResource("StandardMaterial3D_dq5wt")
+size = Vector2(5, 3)
+
+[sub_resource type="QuadMesh" id="QuadMesh_tvkxc"]
+material = SubResource("StandardMaterial3D_dq5wt")
+size = Vector2(1, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c0n45"]
+albedo_color = Color(1, 0.826758, 0.6956168, 1)
+emission_enabled = true
+emission = Color(1, 0.826758, 0.6956168, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_u88ox"]
+material = SubResource("StandardMaterial3D_c0n45")
+radius = 0.1
+height = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4g8uc"]
+shading_mode = 2
+albedo_color = Color(0.42365062, 0.42365065, 0.42365062, 1)
+metallic = 0.5
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_dq5wt"]
+material = SubResource("StandardMaterial3D_4g8uc")
+size = Vector3(5, 1, 1.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_c0n45"]
+size = Vector3(2, 0.05, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pjcp1"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pjcp1"]
+material = SubResource("StandardMaterial3D_pjcp1")
+size = Vector3(0.3, 0.2, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qxjwa"]
+size = Vector3(0.1, 0.3, 0.1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ccq23"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_ccq23"]
+size = Vector3(0.75, 0.4, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u88ox"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_dq5wt"]
+material = SubResource("StandardMaterial3D_u88ox")
+size = Vector2(0.6, 0.25)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0ls5i"]
+size = Vector3(0.25, 0.025, 0.25)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7lpf8"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qxddc"]
+material = SubResource("StandardMaterial3D_7lpf8")
+top_radius = 0.075
+bottom_radius = 0.075
+height = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_1l6e7"]
+size = Vector3(1, 0.75, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1l6e7"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_c0n45"]
+material = SubResource("StandardMaterial3D_1l6e7")
+size = Vector2(0.8, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_u88ox"]
+size = Vector3(0.5, 1, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_p8qt8"]
+size = Vector3(0.5, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tvkxc"]
+size = Vector3(5, 0.1, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qxjwa"]
+albedo_texture = ExtResource("5_1l6e7")
+uv1_scale = Vector3(0.4, 0.4, 0.4)
+uv1_triplanar = true
+texture_filter = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_7lpf8"]
+material = SubResource("StandardMaterial3D_qxjwa")
+size = Vector3(0.7, 0.35, 0.595)
+
+[node name="World" type="Node3D" unique_id=1748042885]
+script = ExtResource("2_world")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=314062653]
+environment = SubResource("Environment_dq5wt")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=540449789]
+material = SubResource("ShaderMaterial_dq5wt")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1809300326]
+handle_input_locally = false
+size = Vector2i(640, 360)
+render_target_update_mode = 4
+
+[node name="Office" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=1859139280]
+transform = Transform3D(1, 0, 0, 0, 0.9848078, 0.17364816, 0, -0.17364816, 0.9848078, 0, 0.4, 0.4)
+
+[node name="Structure" type="Node3D" parent="SubViewportContainer/SubViewport/Office" unique_id=227627294]
+
+[node name="Floor" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Structure" unique_id=236599699]
+mesh = SubResource("PlaneMesh_4g8uc")
+
+[node name="Ceiling" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Structure" unique_id=2109507984]
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 3, 0)
+mesh = SubResource("PlaneMesh_w561s")
+
+[node name="Wall1" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Structure" unique_id=2014139590]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5, 1.5, 0)
+mesh = SubResource("QuadMesh_p8qt8")
+
+[node name="Wall2" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Structure" unique_id=2003135229]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.5, 1.5, 0)
+mesh = SubResource("QuadMesh_p8qt8")
+
+[node name="Wall3" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Structure" unique_id=621887803]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 1.5, 2.5)
+mesh = SubResource("QuadMesh_p8qt8")
+
+[node name="SmallWall1" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Structure" unique_id=1607820861]
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, -2, 1.5, -2.5)
+mesh = SubResource("QuadMesh_tvkxc")
+
+[node name="SmallWall2" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Structure" unique_id=411372828]
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 2, 1.5, -2.5)
+mesh = SubResource("QuadMesh_tvkxc")
+
+[node name="Lighting" type="Node3D" parent="SubViewportContainer/SubViewport/Office" unique_id=214119559]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Lighting" unique_id=1939924176]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+mesh = SubResource("SphereMesh_u88ox")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Office/Lighting/MeshInstance3D" unique_id=1500077878]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.045378923, 0)
+light_color = Color(1, 0.826758, 0.6956168, 1)
+light_energy = 1.1
+shadow_enabled = true
+omni_range = 5.5
+
+[node name="Fixtures" type="Node3D" parent="SubViewportContainer/SubViewport/Office" unique_id=801726005]
+
+[node name="Desk" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures" unique_id=1296813459]
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.2588191, 0, 0.2588191, 0.965926, 0, 0.2204034, -1.8332105)
+mesh = SubResource("BoxMesh_dq5wt")
+
+[node name="ControlPanel" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk" unique_id=1694650386]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1.1920929e-07)
+mesh = SubResource("BoxMesh_c0n45")
+
+[node name="Lever" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel" unique_id=2102757213]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.70000005, 0.100000024, 0)
+mesh = SubResource("BoxMesh_pjcp1")
+
+[node name="Marker3D" type="Marker3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Lever" unique_id=1081686332]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.10059202, -0.100000024)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Lever/Marker3D" unique_id=429762903]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12358773, 0)
+mesh = SubResource("BoxMesh_qxjwa")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Lever/Marker3D/MeshInstance3D" unique_id=2086255089]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0.100000024, 0)
+mesh = SubResource("CylinderMesh_ccq23")
+
+[node name="Scale" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel" unique_id=1158808412]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22739851, -0.29999995)
+mesh = SubResource("BoxMesh_ccq23")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Scale" unique_id=1944507649]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.024326563, 0.05259478)
+mesh = SubResource("QuadMesh_dq5wt")
+
+[node name="Button" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk" unique_id=669949804]
+transform = Transform3D(1, 0, 0, 0, 1, 6.7055225e-08, 0, -6.7055225e-08, 1, -0.7, 0.54679656, 0.05254364)
+mesh = SubResource("BoxMesh_0ls5i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/Button" unique_id=262443100]
+transform = Transform3D(1, 0, 0, 0, 1, 1.4901161e-08, 0, -1.4901161e-08, 1, 0, 0.055497468, -0.0048553944)
+mesh = SubResource("CylinderMesh_qxddc")
+
+[node name="Monitor" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures" unique_id=731419407]
+transform = Transform3D(0.9063077, 0, -0.42261824, 0, 1, 0, 0.42261824, 0, 0.9063077, 1.6, 2.3, -1.8000001)
+mesh = SubResource("BoxMesh_1l6e7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Monitor" unique_id=1015343151]
+transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 0.011562407, 0, 0.051905632)
+mesh = SubResource("QuadMesh_c0n45")
+
+[node name="Navigation" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures" unique_id=1014913806]
+transform = Transform3D(0.9999591, 0.007884526, -0.0044336943, -0.007875501, 0.9999674, 0.0020475239, 0.0044497144, -0.0020126104, 0.99998885, -1.9595573, 1.858747, -2.4791977)
+mesh = SubResource("BoxMesh_u88ox")
+
+[node name="Player" parent="SubViewportContainer/SubViewport/Office" unique_id=1004319539 instance=ExtResource("1_w561s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Workshop" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=1259732932]
+
+[node name="QualityControl" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=434058240]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.1)
+
+[node name="Structure" type="Node3D" parent="SubViewportContainer/SubViewport/QualityControl" unique_id=64949935]
+
+[node name="Floor" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/QualityControl/Structure" unique_id=295530506]
+mesh = SubResource("PlaneMesh_4g8uc")
+
+[node name="Ceiling" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/QualityControl/Structure" unique_id=1539302794]
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 3, 0)
+mesh = SubResource("PlaneMesh_w561s")
+
+[node name="Wall1" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/QualityControl/Structure" unique_id=1992964036]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.5, 1.5, 0)
+mesh = SubResource("QuadMesh_p8qt8")
+
+[node name="Wall2" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/QualityControl/Structure" unique_id=1342585756]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2.5, 1.5, 0)
+mesh = SubResource("QuadMesh_p8qt8")
+
+[node name="Wall3" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/QualityControl/Structure" unique_id=710785035]
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 0, 1.5, -2.5)
+mesh = SubResource("QuadMesh_p8qt8")
+
+[node name="SmallWall1" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/QualityControl/Structure" unique_id=2093821128]
+transform = Transform3D(-1, 0, 2.6226832e-07, 0, 1, 0, -2.6226832e-07, 0, -1, 2, 1.5, 2.5)
+mesh = SubResource("QuadMesh_tvkxc")
+
+[node name="SmallWall2" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/QualityControl/Structure" unique_id=123734604]
+transform = Transform3D(-1, 0, 2.6226832e-07, 0, 1, 0, -2.6226832e-07, 0, -1, -2, 1.5, 2.5)
+mesh = SubResource("QuadMesh_tvkxc")
+
+[node name="Lighting" type="Node3D" parent="SubViewportContainer/SubViewport/QualityControl" unique_id=835491850]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/QualityControl/Lighting" unique_id=1215503255]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+mesh = SubResource("SphereMesh_u88ox")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="SubViewportContainer/SubViewport/QualityControl/Lighting/MeshInstance3D" unique_id=1511072568]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.045378685, 0)
+light_color = Color(1, 0.826758, 0.6956168, 1)
+shadow_enabled = true
+omni_attenuation = 2.0
+
+[node name="Applicances" type="Node3D" parent="SubViewportContainer/SubViewport/QualityControl" unique_id=73293845]
+
+[node name="Conveyor" type="Node3D" parent="SubViewportContainer/SubViewport/QualityControl/Applicances" unique_id=1350952313]
+transform = Transform3D(-1, 0, -8.940697e-08, 0, 1, 0, 8.940697e-08, 0, -1, 0.099999964, 0.90000004, 0.9000001)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/QualityControl/Applicances/Conveyor" unique_id=1981333962]
+transform = Transform3D(-1, 0, 8.940697e-08, 0, 1, 0, -8.940697e-08, 0, -1, 2.3999999, 0.39999992, 0)
+mesh = SubResource("BoxMesh_p8qt8")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/QualityControl/Applicances/Conveyor" unique_id=784890821]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0.39999992, 0)
+mesh = SubResource("BoxMesh_p8qt8")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/QualityControl/Applicances/Conveyor" unique_id=290949407]
+mesh = SubResource("BoxMesh_tvkxc")
+
+[node name="Markers" type="Node3D" parent="SubViewportContainer/SubViewport/QualityControl/Applicances/Conveyor" unique_id=811694269]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05010581, 0)
+
+[node name="Centre" type="Marker3D" parent="SubViewportContainer/SubViewport/QualityControl/Applicances/Conveyor/Markers" unique_id=1245896347]
+
+[node name="Box" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/QualityControl/Applicances/Conveyor/Markers/Centre" unique_id=836097497]
+transform = Transform3D(0.9961947, 0, -0.08715574, 0, 1, 0, 0.08715574, 0, 0.9961947, 0, 0.17400187, 0)
+mesh = SubResource("BoxMesh_7lpf8")
+
+[node name="Start" type="Marker3D" parent="SubViewportContainer/SubViewport/QualityControl/Applicances/Conveyor/Markers" unique_id=1378057846]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 4.7683716e-07)
+
+[node name="End" type="Marker3D" parent="SubViewportContainer/SubViewport/QualityControl/Applicances/Conveyor/Markers" unique_id=1891337032]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -4.7683716e-07)

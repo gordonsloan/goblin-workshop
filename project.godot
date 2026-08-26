@@ -24,16 +24,16 @@ SoundManager="*res://src/autoloads/sound_manager.gd"
 DisplaySettingsManager="*res://src/autoloads/display_settings_manager.gd"
 PauseManager="*res://src/autoloads/pause_manager.gd"
 SaveManager="*res://src/autoloads/save_manager.gd"
+CameraDirector="*res://src/autoloads/camera_director.gd"
 
 [display]
 
-window/size/viewport_width=1280
-window/size/viewport_height=720
+window/size/viewport_width=640
+window/size/viewport_height=360
 window/size/mode=3
 window/size/window_width_override=1280
 window/size/window_height_override=720
-window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/stretch/mode="viewport"
 
 [gui]
 
@@ -108,7 +108,7 @@ rendering_device/driver.windows="d3d12"
 
 main_menu_scene_path="res://src/ui/main_menu/main_menu.tscn"
 settings_scene_path="res://src/ui/settings_menu/settings_menu.tscn"
-start_scene_path="res://src/scenes/levels/placeholder_scene/placeholder_scene.tscn"
+start_scene_path="res://src/scenes/world.tscn"
 use_transitions=true
 transition_scene_path="res://src/ui/transitions/fade_transition.tscn"
 credits_scene_path="res://src/ui/credits_menu/credits_menu.tscn"

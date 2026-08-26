@@ -1,0 +1,204 @@
+[gd_scene format=3 uid="uid://dqakct3r2hc2m"]
+
+[ext_resource type="Script" uid="uid://gf2xpbdpxg4q" path="res://src/scenes/actors/player.gd" id="1_3161n"]
+[ext_resource type="Script" uid="uid://d2bwv30x5qgi7" path="res://src/scenes/actors/head.gd" id="2_xk21n"]
+[ext_resource type="Script" path="res://src/scenes/actors/flashlight.gd" id="3_1oxso"]
+[ext_resource type="Script" path="res://src/scenes/actors/look_ray_cast.gd" id="4_1e0ww"]
+[ext_resource type="Script" path="res://src/scenes/actors/screen_ray_picker.gd" id="5_1e0ww"]
+[ext_resource type="Script" path="res://src/scenes/actors/gui.gd" id="6_d8py6"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ceyjo"]
+radius = 0.320468
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_7h7lv"]
+
+[sub_resource type="Animation" id="Animation_8rkpr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_36jbo"]
+resource_name = "head_bob"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.075, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_play_footstep_audio"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_buv2p"]
+_data = {
+&"RESET": SubResource("Animation_8rkpr"),
+&"head_bob": SubResource("Animation_36jbo")
+}
+
+[sub_resource type="Animation" id="Animation_d8py6"]
+length = 0.001
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l3h4q"]
+_data = {
+&"RESET": SubResource("Animation_d8py6")
+}
+
+[node name="Player" type="CharacterBody3D" unique_id=1004319539 groups=["player"]]
+script = ExtResource("1_3161n")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1161876934]
+shape = SubResource("CapsuleShape3D_ceyjo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=6660383]
+visible = false
+mesh = SubResource("CapsuleMesh_7h7lv")
+
+[node name="Head" type="Node3D" parent="." unique_id=379498518]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("2_xk21n")
+
+[node name="Flashlight" type="SpotLight3D" parent="Head" unique_id=2101211369]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.556156)
+visible = false
+light_color = Color(1, 0.588235, 0.588235, 1)
+light_energy = 1.2
+shadow_enabled = true
+spot_range = 15.0
+spot_angle = 30.0
+script = ExtResource("3_1oxso")
+
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=1396821025]
+transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871557, 0, -0.0871557, 0.996195, 0, 0, 0)
+cull_mask = 524287
+current = true
+fov = 60.0
+
+[node name="LookRayCast" type="RayCast3D" parent="Head/Camera3D" unique_id=1613248046 node_paths=PackedStringArray("camera")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+target_position = Vector3(0, -2, 0)
+collide_with_areas = true
+collide_with_bodies = false
+script = ExtResource("4_1e0ww")
+camera = NodePath("..")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Head/Camera3D" unique_id=1689734837]
+libraries/ = SubResource("AnimationLibrary_buv2p")
+
+[node name="RightHandAnimationPlayer" type="AnimationPlayer" parent="Head/Camera3D" unique_id=847865571]
+libraries/ = SubResource("AnimationLibrary_l3h4q")
+
+[node name="CarryObjectMarker" type="Marker3D" parent="Head/Camera3D" unique_id=272636862]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.263065, -0.174625, -0.533675)
+
+[node name="ScreenRayPicker" type="Node3D" parent="Head/Camera3D" unique_id=1826679315 node_paths=PackedStringArray("camera")]
+script = ExtResource("5_1e0ww")
+camera = NodePath("..")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Head" unique_id=1497024723]
+visible = false
+script = ExtResource("6_d8py6")
+
+[node name="Reticle" type="ColorRect" parent="Head/CanvasLayer" unique_id=194610620]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.0
+offset_top = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.5)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Head/CanvasLayer" unique_id=335273716]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = 84.0
+offset_right = 192.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/normal_font_size = 24
+text = "Voice: Get back to work..."
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Head/CanvasLayer" unique_id=202969308]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Head/CanvasLayer/SubViewportContainer" unique_id=242875467]
+transparent_bg = true
+handle_input_locally = false
+positional_shadow_atlas_size = 4096
+size = Vector2i(640, 360)
+render_target_update_mode = 0
+
+[node name="SubViewportCamera" type="Camera3D" parent="Head/CanvasLayer/SubViewportContainer/SubViewport" unique_id=1520529766]
+cull_mask = 524288
+fov = 60.0
+
+[node name="DebugMenu" type="Control" parent="Head/CanvasLayer" unique_id=1071737458]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Current" type="VBoxContainer" parent="Head/CanvasLayer/DebugMenu" unique_id=1567776851]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -114.0
+offset_bottom = 50.0
+grow_horizontal = 0
+
+[node name="Order" type="Label" parent="Head/CanvasLayer/DebugMenu/Current" unique_id=510486011]
+layout_mode = 2
+text = "CurrentOrder: "
+
+[node name="HeldItem" type="Label" parent="Head/CanvasLayer/DebugMenu/Current" unique_id=1851978068]
+layout_mode = 2
+text = "HeldItem: "
+
+[node name="Footsteps" type="AudioStreamPlayer" parent="." unique_id=696099349]
+volume_db = -10.0
