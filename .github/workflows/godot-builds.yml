@@ -1,0 +1,170 @@
+name: Godot Builds
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: Platform to build
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - web
+          - windows
+      export_mode:
+        description: Export mode
+        required: true
+        default: release
+        type: choice
+        options:
+          - release
+          - debug
+
+permissions:
+  contents: read
+
+env:
+  GODOT_VERSION: "4.6"
+  GODOT_STATUS: stable
+  GODOT_EXECUTABLE: "Godot_v4.6-stable_linux.x86_64"
+  GODOT_DOWNLOAD_URL: "https://downloads.godotengine.org/?flavor=stable&platform=linux.64&slug=linux.x86_64.zip&version=4.6"
+  GODOT_TEMPLATES_URL: "https://downloads.godotengine.org/?flavor=stable&platform=templates&slug=export_templates.tpz&version=4.6"
+  PROJECT_NAME: ${{ github.event.repository.name }}
+
+jobs:
+  validate:
+    name: Validate Project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install Godot
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p "$RUNNER_TEMP/godot"
+          curl --fail --location --show-error --retry 3 "$GODOT_DOWNLOAD_URL" -o "$RUNNER_TEMP/godot/godot.zip"
+          file "$RUNNER_TEMP/godot/godot.zip"
+          unzip -t "$RUNNER_TEMP/godot/godot.zip"
+          unzip -q "$RUNNER_TEMP/godot/godot.zip" -d "$RUNNER_TEMP/godot"
+          chmod +x "$RUNNER_TEMP/godot/$GODOT_EXECUTABLE"
+          echo "$RUNNER_TEMP/godot" >> "$GITHUB_PATH"
+
+      - name: Headless project load
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          "$GODOT_EXECUTABLE" --headless --path . --quit
+
+      - name: Export privacy audit
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/audit_export_privacy.py
+
+      - name: Version metadata check
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/sync_version.py --check
+
+  build:
+    name: Build ${{ matrix.label }}
+    needs: validate
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: web
+            label: Web
+            preset: Web
+            output_dir: exports/web
+            output_file: exports/web/index.html
+          - platform: windows
+            label: Windows Desktop
+            preset: Windows Desktop
+            output_dir: exports/windows
+            output_file: exports/windows/${PROJECT_NAME}.exe
+
+    steps:
+      - name: Checkout
+        if: github.event_name != 'workflow_dispatch' || inputs.platform == 'all' || inputs.platform == matrix.platform
+        uses: actions/checkout@v5
+
+      - name: Install Godot
+        if: github.event_name != 'workflow_dispatch' || inputs.platform == 'all' || inputs.platform == matrix.platform
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p "$RUNNER_TEMP/godot"
+          curl --fail --location --show-error --retry 3 "$GODOT_DOWNLOAD_URL" -o "$RUNNER_TEMP/godot/godot.zip"
+          file "$RUNNER_TEMP/godot/godot.zip"
+          unzip -t "$RUNNER_TEMP/godot/godot.zip"
+          unzip -q "$RUNNER_TEMP/godot/godot.zip" -d "$RUNNER_TEMP/godot"
+          chmod +x "$RUNNER_TEMP/godot/$GODOT_EXECUTABLE"
+          echo "$RUNNER_TEMP/godot" >> "$GITHUB_PATH"
+
+      - name: Install export templates
+        if: github.event_name != 'workflow_dispatch' || inputs.platform == 'all' || inputs.platform == matrix.platform
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          template_dir="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_STATUS}"
+          mkdir -p "$template_dir" "$RUNNER_TEMP/godot_templates"
+          curl --fail --location --show-error --retry 3 "$GODOT_TEMPLATES_URL" -o "$RUNNER_TEMP/godot_templates/templates.tpz"
+          file "$RUNNER_TEMP/godot_templates/templates.tpz"
+          unzip -t "$RUNNER_TEMP/godot_templates/templates.tpz"
+          unzip -q "$RUNNER_TEMP/godot_templates/templates.tpz" -d "$RUNNER_TEMP/godot_templates"
+          cp -R "$RUNNER_TEMP/godot_templates/templates/." "$template_dir/"
+
+      - name: Export ${{ matrix.label }}
+        if: github.event_name != 'workflow_dispatch' || inputs.platform == 'all' || inputs.platform == matrix.platform
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p "${{ matrix.output_dir }}"
+          if [[ "${{ inputs.export_mode || 'release' }}" == "debug" ]]; then
+            export_flag="--export-debug"
+          else
+            export_flag="--export-release"
+          fi
+
+          "$GODOT_EXECUTABLE" --headless --path . "$export_flag" "${{ matrix.preset }}" "${{ matrix.output_file }}"
+
+      - name: Prepare artifact metadata
+        id: artifact_metadata
+        if: github.event_name != 'workflow_dispatch' || inputs.platform == 'all' || inputs.platform == matrix.platform
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          short_sha="${GITHUB_SHA::7}"
+          if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
+            build_kind="pr"
+          else
+            build_kind="manual"
+          fi
+
+          echo "short_sha=$short_sha" >> "$GITHUB_OUTPUT"
+          echo "build_kind=$build_kind" >> "$GITHUB_OUTPUT"
+
+      - name: Upload ${{ matrix.label }} artifact
+        if: github.event_name != 'workflow_dispatch' || inputs.platform == 'all' || inputs.platform == matrix.platform
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.PROJECT_NAME }}-${{ steps.artifact_metadata.outputs.build_kind }}-${{ matrix.platform }}-${{ steps.artifact_metadata.outputs.short_sha }}
+          path: ${{ matrix.output_dir }}
+          if-no-files-found: error
+          retention-days: 7

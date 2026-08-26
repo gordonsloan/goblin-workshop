@@ -1,0 +1,122 @@
+name: Godot Release
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: write
+
+env:
+  GODOT_VERSION: "4.6"
+  GODOT_STATUS: stable
+  GODOT_EXECUTABLE: "Godot_v4.6-stable_linux.x86_64"
+  GODOT_DOWNLOAD_URL: "https://downloads.godotengine.org/?flavor=stable&platform=linux.64&slug=linux.x86_64.zip&version=4.6"
+  GODOT_TEMPLATES_URL: "https://downloads.godotengine.org/?flavor=stable&platform=templates&slug=export_templates.tpz&version=4.6"
+  PROJECT_NAME: ${{ github.event.repository.name }}
+
+jobs:
+  release-build:
+    name: Build Release Assets
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Read version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          version="$(tr -d '[:space:]' < VERSION)"
+          tag="v${version}"
+
+          if [[ "${{ github.event.release.tag_name }}" != "$tag" ]]; then
+            echo "Release tag '${{ github.event.release.tag_name }}' does not match VERSION '$version'." >&2
+            exit 1
+          fi
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Install Godot
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p "$RUNNER_TEMP/godot"
+          curl --fail --location --show-error --retry 3 "$GODOT_DOWNLOAD_URL" -o "$RUNNER_TEMP/godot/godot.zip"
+          file "$RUNNER_TEMP/godot/godot.zip"
+          unzip -t "$RUNNER_TEMP/godot/godot.zip"
+          unzip -q "$RUNNER_TEMP/godot/godot.zip" -d "$RUNNER_TEMP/godot"
+          chmod +x "$RUNNER_TEMP/godot/$GODOT_EXECUTABLE"
+          echo "$RUNNER_TEMP/godot" >> "$GITHUB_PATH"
+
+      - name: Install export templates
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          template_dir="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_STATUS}"
+          mkdir -p "$template_dir" "$RUNNER_TEMP/godot_templates"
+          curl --fail --location --show-error --retry 3 "$GODOT_TEMPLATES_URL" -o "$RUNNER_TEMP/godot_templates/templates.tpz"
+          file "$RUNNER_TEMP/godot_templates/templates.tpz"
+          unzip -t "$RUNNER_TEMP/godot_templates/templates.tpz"
+          unzip -q "$RUNNER_TEMP/godot_templates/templates.tpz" -d "$RUNNER_TEMP/godot_templates"
+          cp -R "$RUNNER_TEMP/godot_templates/templates/." "$template_dir/"
+
+      - name: Validate project
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          "$GODOT_EXECUTABLE" --headless --path . --quit
+          python3 scripts/audit_export_privacy.py
+          python3 scripts/sync_version.py --check
+
+      - name: Export release builds
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p exports/web exports/windows
+          "$GODOT_EXECUTABLE" --headless --path . --export-release "Web" exports/web/index.html
+          "$GODOT_EXECUTABLE" --headless --path . --export-release "Windows Desktop" "exports/windows/${PROJECT_NAME}.exe"
+
+      - name: Package release assets
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          version="${{ steps.version.outputs.version }}"
+          tag="${{ steps.version.outputs.tag }}"
+          release_dir="builds/release/${tag}"
+          mkdir -p "$release_dir"
+
+          (cd exports/web && zip -r "../../${release_dir}/${PROJECT_NAME}-${tag}-web.zip" .)
+          (cd exports/windows && zip -r "../../${release_dir}/${PROJECT_NAME}-${tag}-windows.zip" .)
+
+          (cd "$release_dir" && sha256sum *.zip > SHA256SUMS.txt)
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ env.PROJECT_NAME }}-${{ steps.version.outputs.tag }}-release-assets
+          path: builds/release/${{ steps.version.outputs.tag }}
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Attach assets to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          release_dir="builds/release/${{ steps.version.outputs.tag }}"
+          gh release upload "${{ steps.version.outputs.tag }}" "$release_dir"/*.zip "$release_dir/SHA256SUMS.txt" --clobber

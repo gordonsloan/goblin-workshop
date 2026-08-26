@@ -1,0 +1,75 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/ui/pause_menu/pause_menu.gd" id="1_pause_menu"]
+
+[node name="PauseMenu" type="CanvasLayer"]
+process_mode = 3
+layer = 32
+script = ExtResource("1_pause_menu")
+
+[node name="Overlay" type="Control" parent="."]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dimmer" type="ColorRect" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.025, 0.04, 0.72)
+
+[node name="MarginContainer" type="MarginContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 48
+
+[node name="CenterContainer" type="CenterContainer" parent="Overlay/MarginContainer"]
+layout_mode = 2
+
+[node name="PauseStack" type="VBoxContainer" parent="Overlay/MarginContainer/CenterContainer"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Overlay/MarginContainer/CenterContainer/PauseStack"]
+layout_mode = 2
+theme_type_variation = &"MenuTitleLabel"
+text = "Paused"
+horizontal_alignment = 1
+
+[node name="ButtonSpacer" type="Control" parent="Overlay/MarginContainer/CenterContainer/PauseStack"]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+
+[node name="ResumeButton" type="Button" parent="Overlay/MarginContainer/CenterContainer/PauseStack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Resume"
+
+[node name="SettingsButton" type="Button" parent="Overlay/MarginContainer/CenterContainer/PauseStack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Settings"
+
+[node name="MainMenuButton" type="Button" parent="Overlay/MarginContainer/CenterContainer/PauseStack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Main Menu"

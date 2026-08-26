@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/ui/transitions/wipe_transition.gd" id="1_wipe_transition"]
+
+[node name="WipeTransition" type="CanvasLayer"]
+layer = 128
+script = ExtResource("1_wipe_transition")
+
+[node name="Overlay" type="ColorRect" parent="."]
+unique_name_in_owner = true
+anchor_bottom = 1.0
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

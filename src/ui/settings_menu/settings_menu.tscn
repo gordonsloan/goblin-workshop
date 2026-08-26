@@ -1,0 +1,153 @@
+[gd_scene format=3 uid="uid://dowwlv2cmmbbh"]
+
+[ext_resource type="Script" uid="uid://cxiyfbq5h5etk" path="res://src/ui/settings_menu/settings_menu.gd" id="1_settings"]
+[ext_resource type="PackedScene" uid="uid://qxookaoqai6s" path="res://src/ui/backgrounds/scrolling_checkerboard_background.tscn" id="2_background"]
+
+[node name="SettingsMenu" type="Control" unique_id=123909889]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_settings")
+
+[node name="AnimatedBackground" parent="." unique_id=975396332 instance=ExtResource("2_background")]
+layout_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1918335780]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 48
+
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer" unique_id=1766913560]
+layout_mode = 2
+
+[node name="SettingsStack" type="VBoxContainer" parent="MarginContainer/CenterContainer" unique_id=1195417081]
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/CenterContainer/SettingsStack" unique_id=902157695]
+layout_mode = 2
+theme_type_variation = &"MenuTitleLabel"
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="AudioLabel" type="Label" parent="MarginContainer/CenterContainer/SettingsStack" unique_id=1873053504]
+layout_mode = 2
+theme_type_variation = &"MenuSectionLabel"
+text = "Audio"
+
+[node name="MasterVolumeRow" type="HBoxContainer" parent="MarginContainer/CenterContainer/SettingsStack" unique_id=1343577351]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MasterVolumeLabel" type="Label" parent="MarginContainer/CenterContainer/SettingsStack/MasterVolumeRow" unique_id=95714568]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Master"
+vertical_alignment = 1
+
+[node name="MasterVolumeSlider" type="HSlider" parent="MarginContainer/CenterContainer/SettingsStack/MasterVolumeRow" unique_id=1091010884]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+ticks_position = 3
+
+[node name="MusicVolumeRow" type="HBoxContainer" parent="MarginContainer/CenterContainer/SettingsStack" unique_id=1244445160]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MusicVolumeLabel" type="Label" parent="MarginContainer/CenterContainer/SettingsStack/MusicVolumeRow" unique_id=776537571]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Music"
+vertical_alignment = 1
+
+[node name="MusicVolumeSlider" type="HSlider" parent="MarginContainer/CenterContainer/SettingsStack/MusicVolumeRow" unique_id=198191973]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+ticks_position = 3
+
+[node name="SfxVolumeRow" type="HBoxContainer" parent="MarginContainer/CenterContainer/SettingsStack" unique_id=898482991]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="SfxVolumeLabel" type="Label" parent="MarginContainer/CenterContainer/SettingsStack/SfxVolumeRow" unique_id=200296673]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "SFX"
+vertical_alignment = 1
+
+[node name="SfxVolumeSlider" type="HSlider" parent="MarginContainer/CenterContainer/SettingsStack/SfxVolumeRow" unique_id=1718449356]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+ticks_position = 3
+
+[node name="VisualLabel" type="Label" parent="MarginContainer/CenterContainer/SettingsStack" unique_id=2110578445]
+layout_mode = 2
+theme_type_variation = &"MenuSectionLabel"
+text = "Visual"
+
+[node name="WindowModeRow" type="HBoxContainer" parent="MarginContainer/CenterContainer/SettingsStack" unique_id=878684093]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="WindowModeLabel" type="Label" parent="MarginContainer/CenterContainer/SettingsStack/WindowModeRow" unique_id=356225980]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "Window Mode"
+vertical_alignment = 1
+
+[node name="WindowModeOption" type="OptionButton" parent="MarginContainer/CenterContainer/SettingsStack/WindowModeRow" unique_id=886135317]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VSyncRow" type="HBoxContainer" parent="MarginContainer/CenterContainer/SettingsStack" unique_id=1338086798]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="VSyncLabel" type="Label" parent="MarginContainer/CenterContainer/SettingsStack/VSyncRow" unique_id=1549759828]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "VSync"
+vertical_alignment = 1
+
+[node name="VSyncCheckBox" type="CheckBox" parent="MarginContainer/CenterContainer/SettingsStack/VSyncRow" unique_id=682528937]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Enabled"
+
+[node name="ButtonRow" type="HBoxContainer" parent="MarginContainer/CenterContainer/SettingsStack" unique_id=720181538]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="ResetDefaultsButton" type="Button" parent="MarginContainer/CenterContainer/SettingsStack/ButtonRow" unique_id=903162686]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Reset Defaults"
+
+[node name="BackButton" type="Button" parent="MarginContainer/CenterContainer/SettingsStack/ButtonRow" unique_id=543365559]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Back"
