@@ -4,7 +4,11 @@
 [ext_resource type="Shader" uid="uid://dlkh8gqhnpfck" path="res://src/shaders/psProcess.gdshader" id="2_dq5wt"]
 [ext_resource type="Script" uid="uid://c3b8x11xfnwg2" path="res://src/scenes/world.gd" id="2_world"]
 [ext_resource type="Texture2D" uid="uid://26xb3yuqfsiu" path="res://src/assets/Color Maps/metal_wall_4.png" id="3_dq5wt"]
-[ext_resource type="Texture2D" uid="uid://b7vtlt6h1mivm" path="res://src/assets/Color Maps/wood_5.png" id="5_1l6e7"]
+[ext_resource type="PackedScene" path="res://src/scenes/objects/box/box_item.tscn" id="6_box"]
+[ext_resource type="Script" uid="uid://csngnoltrc71p" path="res://src/scenes/objects/conveyor/conveyor_controller.gd" id="7_conveyor"]
+[ext_resource type="Script" uid="uid://cgf3dgx1ct1dg" path="res://src/scenes/objects/scale/scale_display.gd" id="8_scale_display"]
+[ext_resource type="Script" uid="uid://qoe2g5v3so2i" path="res://src/scenes/objects/lever/lever.gd" id="9_lever"]
+[ext_resource type="Script" uid="uid://d0shhjucas8sl" path="res://src/common/interaction/hit_box_3d.gd" id="10_hitbox"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p8qt8"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -21,7 +25,7 @@ glow_enabled = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dq5wt"]
 shader = ExtResource("2_dq5wt")
-shader_parameter/enabled = true
+shader_parameter/enabled = false
 shader_parameter/dithering = false
 shader_parameter/colors = 16
 shader_parameter/dither_size = 1
@@ -89,6 +93,9 @@ albedo_color = Color(0, 1, 0, 1)
 material = SubResource("StandardMaterial3D_pjcp1")
 size = Vector3(0.3, 0.2, 0.5)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_lever_hitbox"]
+size = Vector3(0.55, 0.55, 0.55)
+
 [sub_resource type="BoxMesh" id="BoxMesh_qxjwa"]
 size = Vector3(0.1, 0.3, 0.1)
 
@@ -137,16 +144,6 @@ size = Vector3(0.5, 1, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_tvkxc"]
 size = Vector3(5, 0.1, 0.8)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qxjwa"]
-albedo_texture = ExtResource("5_1l6e7")
-uv1_scale = Vector3(0.4, 0.4, 0.4)
-uv1_triplanar = true
-texture_filter = 0
-
-[sub_resource type="BoxMesh" id="BoxMesh_7lpf8"]
-material = SubResource("StandardMaterial3D_qxjwa")
-size = Vector3(0.7, 0.35, 0.595)
 
 [node name="World" type="Node3D" unique_id=1748042885]
 script = ExtResource("2_world")
@@ -208,10 +205,8 @@ mesh = SubResource("SphereMesh_u88ox")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Office/Lighting/MeshInstance3D" unique_id=1500077878]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.045378923, 0)
-light_color = Color(1, 0.826758, 0.6956168, 1)
-light_energy = 1.1
+light_energy = 2.0
 shadow_enabled = true
-omni_range = 5.5
 
 [node name="Fixtures" type="Node3D" parent="SubViewportContainer/SubViewport/Office" unique_id=801726005]
 
@@ -226,6 +221,14 @@ mesh = SubResource("BoxMesh_c0n45")
 [node name="Lever" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel" unique_id=2102757213]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.70000005, 0.100000024, 0)
 mesh = SubResource("BoxMesh_pjcp1")
+script = ExtResource("9_lever")
+
+[node name="HitBox" type="Area3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Lever" unique_id=769039126]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.245, -0.05)
+script = ExtResource("10_hitbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Lever/HitBox" unique_id=1169408065]
+shape = SubResource("BoxShape3D_lever_hitbox")
 
 [node name="Marker3D" type="Marker3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Lever" unique_id=1081686332]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.10059202, -0.100000024)
@@ -241,10 +244,36 @@ mesh = SubResource("CylinderMesh_ccq23")
 [node name="Scale" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel" unique_id=1158808412]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22739851, -0.29999995)
 mesh = SubResource("BoxMesh_ccq23")
+script = ExtResource("8_scale_display")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Scale" unique_id=1944507649]
+[node name="display" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Scale" unique_id=1944507649]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.024326563, 0.05259478)
 mesh = SubResource("QuadMesh_dq5wt")
+
+[node name="DisplayViewport" type="SubViewport" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Scale" unique_id=1773149430]
+transparent_bg = true
+size = Vector2i(256, 96)
+render_target_update_mode = 4
+
+[node name="DisplayRoot" type="Control" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Scale/DisplayViewport" unique_id=1610157810]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ValueLabel" type="Label" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Scale/DisplayViewport/DisplayRoot" unique_id=1137380561]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.45, 1, 0.35, 1)
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Button" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk" unique_id=669949804]
 transform = Transform3D(1, 0, 0, 0, 1, 6.7055225e-08, 0, -6.7055225e-08, 1, -0.7, 0.54679656, 0.05254364)
@@ -319,6 +348,8 @@ omni_attenuation = 2.0
 
 [node name="Conveyor" type="Node3D" parent="SubViewportContainer/SubViewport/QualityControl/Applicances" unique_id=1350952313]
 transform = Transform3D(-1, 0, -8.940697e-08, 0, 1, 0, 8.940697e-08, 0, -1, 0.099999964, 0.90000004, 0.9000001)
+script = ExtResource("7_conveyor")
+box_scene = ExtResource("6_box")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/QualityControl/Applicances/Conveyor" unique_id=1981333962]
 transform = Transform3D(-1, 0, 8.940697e-08, 0, 1, 0, -8.940697e-08, 0, -1, 2.3999999, 0.39999992, 0)
@@ -335,10 +366,6 @@ mesh = SubResource("BoxMesh_tvkxc")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05010581, 0)
 
 [node name="Centre" type="Marker3D" parent="SubViewportContainer/SubViewport/QualityControl/Applicances/Conveyor/Markers" unique_id=1245896347]
-
-[node name="Box" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/QualityControl/Applicances/Conveyor/Markers/Centre" unique_id=836097497]
-transform = Transform3D(0.9961947, 0, -0.08715574, 0, 1, 0, 0.08715574, 0, 0.9961947, 0, 0.17400187, 0)
-mesh = SubResource("BoxMesh_7lpf8")
 
 [node name="Start" type="Marker3D" parent="SubViewportContainer/SubViewport/QualityControl/Applicances/Conveyor/Markers" unique_id=1378057846]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 4.7683716e-07)

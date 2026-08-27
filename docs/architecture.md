@@ -24,6 +24,7 @@ List autoloads here when added.
 | DisplaySettingsManager | `res://src/autoloads/display_settings_manager.gd` | Centralizes session display settings for window mode and VSync. |
 | PauseManager | `res://src/autoloads/pause_manager.gd` | Centralizes gameplay pause state, pause menu overlays, and paused settings flow. |
 | SaveManager | `res://src/autoloads/save_manager.gd` | Provides a minimal versioned profile save/load helper using Godot's per-user storage path. |
+| GameManager | `res://src/autoloads/game_manager.gd` | Tracks the active quality-control box, displayed weight, and approval/clear signals. |
 
 ## Scene Navigation
 

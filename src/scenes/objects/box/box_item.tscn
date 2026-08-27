@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/scenes/objects/box/box_item.gd" id="1_box_item"]
+[ext_resource type="Texture2D" path="res://src/assets/Color Maps/wood_5.png" id="2_wood"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_box"]
+albedo_texture = ExtResource("2_wood")
+uv1_scale = Vector3(0.4, 0.4, 0.4)
+uv1_triplanar = true
+texture_filter = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_box"]
+material = SubResource("StandardMaterial3D_box")
+size = Vector3(0.7, 0.35, 0.595)
+
+[node name="BoxItem" type="Node3D"]
+script = ExtResource("1_box_item")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9961947, 0, -0.08715574, 0, 1, 0, 0.08715574, 0, 0.9961947, 0, 0.17400187, 0)
+mesh = SubResource("BoxMesh_box")

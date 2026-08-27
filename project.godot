@@ -25,6 +25,7 @@ DisplaySettingsManager="*res://src/autoloads/display_settings_manager.gd"
 PauseManager="*res://src/autoloads/pause_manager.gd"
 SaveManager="*res://src/autoloads/save_manager.gd"
 CameraDirector="*res://src/autoloads/camera_director.gd"
+GameManager="*res://src/autoloads/game_manager.gd"
 
 [display]
 

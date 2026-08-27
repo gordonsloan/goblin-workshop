@@ -34,7 +34,10 @@ func _input(event: InputEvent) -> void:
 	if not can_turn:
 		return
 
-	if event.is_action_pressed("move_left"):
+	if event.is_action_pressed("interact"):
+		_interact_with_current_target()
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("move_left"):
 		_request_turn(+1)
 	elif event.is_action_pressed("move_right"):
 		_request_turn(-1)
@@ -89,3 +92,11 @@ func set_control_enabled(enabled: bool) -> void:
 
 func update_player_movement(enabled: bool) -> void:
 	set_control_enabled(enabled)
+
+
+func _interact_with_current_target() -> void:
+	var target := look_ray.get_current_target()
+	if target == null:
+		return
+
+	target.interact()

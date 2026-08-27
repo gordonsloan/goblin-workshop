@@ -18,3 +18,4 @@ Current template autoloads include:
 - `DisplaySettingsManager` for display preferences.
 - `PauseManager` for gameplay pause overlays.
 - `SaveManager` for a minimal versioned profile save/load pattern.
+- `GameManager` for prototype gameplay-loop state and signals.
