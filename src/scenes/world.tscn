@@ -9,6 +9,8 @@
 [ext_resource type="Script" uid="uid://cgf3dgx1ct1dg" path="res://src/scenes/objects/scale/scale_display.gd" id="8_scale_display"]
 [ext_resource type="Script" uid="uid://qoe2g5v3so2i" path="res://src/scenes/objects/lever/lever.gd" id="9_lever"]
 [ext_resource type="Script" uid="uid://d0shhjucas8sl" path="res://src/common/interaction/hit_box_3d.gd" id="10_hitbox"]
+[ext_resource type="Script" uid="uid://dt6eagu0orq61" path="res://src/scenes/objects/button/control_panel_button.gd" id="11_button"]
+[ext_resource type="Script" uid="uid://qv6ggel5il47" path="res://src/scenes/objects/monitor/productivity_monitor.gd" id="12_monitor"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p8qt8"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -116,6 +118,9 @@ size = Vector2(0.6, 0.25)
 
 [sub_resource type="BoxMesh" id="BoxMesh_0ls5i"]
 size = Vector3(0.25, 0.025, 0.25)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_button_hitbox"]
+size = Vector3(0.4, 0.22, 0.4)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7lpf8"]
 albedo_color = Color(1, 0, 0, 1)
@@ -275,21 +280,81 @@ theme_override_font_sizes/font_size = 30
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk" unique_id=669949804]
-transform = Transform3D(1, 0, 0, 0, 1, 6.7055225e-08, 0, -6.7055225e-08, 1, -0.7, 0.54679656, 0.05254364)
+[node name="Button" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel" unique_id=669949804]
+transform = Transform3D(1, 0, 0, 0, 1, 7.4505806e-08, 0, -7.4505806e-08, 1, -0.7, 0.04679656, 0.05254376)
 mesh = SubResource("BoxMesh_0ls5i")
+script = ExtResource("11_button")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/Button" unique_id=262443100]
+[node name="HitBox" type="Area3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Button" unique_id=1975699619]
+transform = Transform3D(1, 0, 0, 0, 1, 7.4505806e-08, 0, -7.4505806e-08, 1, 0, 0.08, 0)
+script = ExtResource("10_hitbox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Button/HitBox" unique_id=1877902994]
+shape = SubResource("BoxShape3D_button_hitbox")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Desk/ControlPanel/Button" unique_id=262443100]
 transform = Transform3D(1, 0, 0, 0, 1, 1.4901161e-08, 0, -1.4901161e-08, 1, 0, 0.055497468, -0.0048553944)
 mesh = SubResource("CylinderMesh_qxddc")
 
 [node name="Monitor" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures" unique_id=731419407]
 transform = Transform3D(0.9063077, 0, -0.42261824, 0, 1, 0, 0.42261824, 0, 0.9063077, 1.6, 2.3, -1.8000001)
 mesh = SubResource("BoxMesh_1l6e7")
+script = ExtResource("12_monitor")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Monitor" unique_id=1015343151]
+[node name="display" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures/Monitor" unique_id=1015343151]
 transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 0.011562407, 0, 0.051905632)
 mesh = SubResource("QuadMesh_c0n45")
+
+[node name="DisplayViewport" type="SubViewport" parent="SubViewportContainer/SubViewport/Office/Fixtures/Monitor" unique_id=1880492475]
+transparent_bg = true
+size = Vector2i(320, 240)
+render_target_update_mode = 4
+
+[node name="DisplayRoot" type="Control" parent="SubViewportContainer/SubViewport/Office/Fixtures/Monitor/DisplayViewport" unique_id=459816674]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="SubViewportContainer/SubViewport/Office/Fixtures/Monitor/DisplayViewport/DisplayRoot" unique_id=1038367410]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 18.0
+offset_bottom = 50.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.55, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "PRODUCTIVITY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProductivityBar" type="ProgressBar" parent="SubViewportContainer/SubViewport/Office/Fixtures/Monitor/DisplayViewport/DisplayRoot" unique_id=1370186824]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 36.0
+offset_top = 98.0
+offset_right = -36.0
+offset_bottom = 138.0
+grow_horizontal = 2
+value = 90.0
+show_percentage = false
+
+[node name="ValueLabel" type="Label" parent="SubViewportContainer/SubViewport/Office/Fixtures/Monitor/DisplayViewport/DisplayRoot" unique_id=1493638737]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 152.0
+offset_bottom = 194.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.55, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 34
+text = "90%"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Navigation" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Office/Fixtures" unique_id=1014913806]
 transform = Transform3D(0.9999591, 0.007884526, -0.0044336943, -0.007875501, 0.9999674, 0.0020475239, 0.0044497144, -0.0020126104, 0.99998885, -1.9595573, 1.858747, -2.4791977)

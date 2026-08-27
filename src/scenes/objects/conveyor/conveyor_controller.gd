@@ -74,13 +74,14 @@ func _process_next_box() -> void:
 		return
 
 	GameManager.display_weight(_get_random_weight())
-	await GameManager.box_approved
+	var decision := await _wait_for_current_box_decision()
 	if not _is_current_box_valid():
 		return
 
-	await _current_box.call("move_to_global", _end_marker.global_position, travel_duration)
-	if not _is_current_box_valid():
-		return
+	if decision == &"approved":
+		await _current_box.call("move_to_global", _end_marker.global_position, travel_duration)
+		if not _is_current_box_valid():
+			return
 
 	var cleared_box: Node3D = _current_box
 	_current_box = null
@@ -90,6 +91,17 @@ func _process_next_box() -> void:
 
 func _is_current_box_valid() -> bool:
 	return _current_box != null and is_instance_valid(_current_box) and _running
+
+
+func _wait_for_current_box_decision() -> StringName:
+	while _running and is_inside_tree():
+		var result: Array = await GameManager.box_resolved
+		var resolved_box := result[0] as Node
+		var decision := result[1] as StringName
+		if resolved_box == _current_box:
+			return decision
+
+	return &""
 
 
 func _get_random_weight() -> float:

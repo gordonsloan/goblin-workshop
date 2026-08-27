@@ -5,6 +5,8 @@ class_name Lever
 @export var pull_angle_deg: float = 45.0
 @export var pull_duration: float = 0.15
 @export var return_duration: float = 0.75
+@export var invalid_jiggle_angle_deg: float = 6.0
+@export var invalid_jiggle_duration: float = 0.08
 
 @onready var _animated_node: Node3D = get_node(animated_node_path) as Node3D
 
@@ -21,6 +23,8 @@ func interact() -> void:
 		return
 
 	if not GameManager.approve_current_box():
+		print("No weighed box is ready for approval.")
+		_play_invalid_jiggle()
 		return
 
 	_play_pull_animation()
@@ -33,5 +37,18 @@ func _play_pull_animation() -> void:
 	_animation_tween.set_ease(Tween.EASE_OUT)
 	_animation_tween.tween_property(_animated_node, "rotation_degrees", pulled_rotation, pull_duration)
 	_animation_tween.tween_property(_animated_node, "rotation_degrees", _rest_rotation, return_duration)
+	await _animation_tween.finished
+	_animation_tween = null
+
+
+func _play_invalid_jiggle() -> void:
+	var left_rotation := _rest_rotation + Vector3(0.0, invalid_jiggle_angle_deg, 0.0)
+	var right_rotation := _rest_rotation + Vector3(0.0, -invalid_jiggle_angle_deg, 0.0)
+	_animation_tween = create_tween()
+	_animation_tween.set_trans(Tween.TRANS_SINE)
+	_animation_tween.set_ease(Tween.EASE_IN_OUT)
+	_animation_tween.tween_property(_animated_node, "rotation_degrees", left_rotation, invalid_jiggle_duration)
+	_animation_tween.tween_property(_animated_node, "rotation_degrees", right_rotation, invalid_jiggle_duration * 2.0)
+	_animation_tween.tween_property(_animated_node, "rotation_degrees", _rest_rotation, invalid_jiggle_duration)
 	await _animation_tween.finished
 	_animation_tween = null
